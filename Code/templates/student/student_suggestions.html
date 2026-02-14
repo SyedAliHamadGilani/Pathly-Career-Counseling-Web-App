@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>University Suggestions</h1>
+    <p>Your Aggregate: <strong>{{ user_agg|round(2) }}%</strong> | Filtered by City: <strong>{{ current_user.student_profile.city_pref or 'All' }}</strong></p>
+    <a href="{{ url_for('student_dashboard') }}">&larr; Back to Dashboard</a>
+</div>
+
+<div class="grid-container">
+    {% if suggestions %}
+        {% for uni in suggestions %}
+        <div class="card">
+            <h3 class="card-title">{{ uni.name }}</h3>
+            <p class="mb-2"><i class="fas fa-map-marker-alt text-gold"></i> {{ uni.city }}</p>
+            <p>Required Aggregate: {{ uni.min_aggregate }}%</p>
+            <div style="margin-top: 15px;">
+                <span class="btn btn-success btn-sm" style="cursor: default;">Eligible</span>
+                <a href="#" class="btn btn-sm" style="float: right;">Apply Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="card" style="grid-column: 1 / -1;">
+            <p>No universities found matching your aggregate and city preference.</p>
+            <a href="{{ url_for('student_preferences') }}">Update Preferences</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

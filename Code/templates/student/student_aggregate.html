@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Calculate Aggregate</h1>
+    <a href="{{ url_for('student_dashboard') }}">&larr; Back to Dashboard</a>
+</div>
+
+<div style="display: flex; gap: 30px; flex-wrap: wrap;">
+    <div class="auth-card" style="margin: 0; max-width: 400px; text-align: left;">
+        <form method="POST" action="{{ url_for('calculate_aggregate') }}">
+            <!-- Fix #3: Formula Selection -->
+            <div class="form-group">
+                <label>Formula Type</label>
+                <select name="formula" class="form-control">
+                    <option value="engineering">Engineering (10% SSC, 40% HSSC, 50% Test)</option>
+                    <option value="medical">Medical (10% SSC, 40% HSSC, 50% Test)</option>
+                    <option value="general">General (20% SSC, 80% HSSC)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>SSC Marks (%)</label>
+                <input type="number" name="ssc" step="0.01" class="form-control" value="{{ current_user.student_profile.ssc_marks }}" required>
+            </div>
+            <div class="form-group">
+                <label>HSSC Marks (%)</label>
+                <input type="number" name="hssc" step="0.01" class="form-control" value="{{ current_user.student_profile.hssc_marks }}" required>
+            </div>
+            <div class="form-group">
+                <label>Entry Test Marks (%)</label>
+                <input type="number" name="test" step="0.01" class="form-control" value="{{ current_user.student_profile.test_score }}" required>
+            </div>
+            <button type="submit" class="btn btn-block">Calculate & Save</button>
+        </form>
+    </div>
+
+    <div class="card" style="flex: 1; min-width: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+        <i class="fas fa-chart-pie card-icon" style="font-size: 4rem;"></i>
+        <h2 class="mt-2">Your Aggregate</h2>
+        <div style="font-size: 3rem; font-weight: 700; color: var(--primary-gold); margin: 20px 0;">
+            {{ current_user.student_profile.aggregate|round(2) }}%
+        </div>
+        <p class="text-grey">Based on selected formula</p>
+    </div>
+</div>
+{% endblock %}

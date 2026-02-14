@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center" style="padding: 60px 0;">
+    <h1 style="font-size: 3rem; margin-bottom: 20px;">Shape Your <span class="text-gold">Future</span> With Confidence</h1>
+    <p style="font-size: 1.2rem; color: #666; max-width: 600px; margin: 0 auto 40px;">
+        Pathly bridges the gap between your academic results and your dream university. 
+        Calculate aggregates, get personalized suggestions, and chat with experts.
+    </p>
+    
+    {% if not current_user.is_authenticated %}
+    <div style="display: flex; gap: 20px; justify-content: center;">
+        <a href="{{ url_for('register') }}" class="btn">Register as Student</a>
+        <a href="{{ url_for('register') }}" class="btn btn-secondary">Join as Counselor</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="grid-container">
+    <div class="card text-center">
+        <i class="fas fa-calculator card-icon"></i>
+        <h3 class="card-title">Merit Calculator</h3>
+        <p class="card-text">Accurate aggregate calculations based on the latest board formulas.</p>
+    </div>
+    <div class="card text-center">
+        <i class="fas fa-university card-icon"></i>
+        <h3 class="card-title">University Finder</h3>
+        <p class="card-text">Personalized recommendations matching your academic profile.</p>
+    </div>
+    <div class="card text-center">
+        <i class="fas fa-comments card-icon"></i>
+        <h3 class="card-title">Expert Counseling</h3>
+        <p class="card-text">One-on-one chat with verified career counselors.</p>
+    </div>
+</div>
+
+<div class="card" style="margin-top: 40px;">
+    <h3 style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 20px;">
+        <i class="fas fa-bullhorn text-gold"></i> Latest Announcements
+    </h3>
+    {% if announcements %}
+        {% for ann in announcements %}
+            <div style="margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px dashed #eee;">
+                <h4>{{ ann.title }}</h4>
+                <p>{{ ann.content }}</p>
+                <small class="text-gold">{{ ann.created_at.strftime('%Y-%m-%d') }}</small>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">No announcements at the moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

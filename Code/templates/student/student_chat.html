@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    /* Local styles to fix linter errors and clean up HTML */
+    .chat-contact {
+        display: block;
+        padding: 10px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+        background-color: white;
+        text-decoration: none; /* Ensure links don't have underlines */
+    }
+    .chat-contact:hover {
+        background-color: #f9f9f9;
+    }
+    .chat-contact.active-chat {
+        background-color: #f0f0f0;
+        border-left: 4px solid var(--primary-gold);
+    }
+</style>
+
+<div class="dashboard-header" style="margin-bottom: 0; padding-bottom: 10px;">
+    <h1>Counselor Chat</h1>
+    <a href="{{ url_for('student_dashboard') }}">&larr; Dashboard</a>
+</div>
+
+<!-- Continuous Chat UI -->
+<div class="chat-container">
+    
+    <!-- Sidebar: List of Counselors -->
+    <div class="chat-sidebar">
+        <div class="chat-header">Verified Counselors</div>
+        <div style="padding: 10px;">
+            {% for c in counselors %}
+                <!-- Logic moved to class attribute -->
+                <a href="{{ url_for('student_chat', counselor_id=c.user.id) }}" 
+                   class="chat-contact {% if active_counselor and active_counselor.id == c.user.id %}active-chat{% endif %}">
+                    <div style="font-weight: bold;">{{ c.user.username }}</div>
+                    <small style="color: #666;">{{ c.qualification }}</small>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Main Chat Area -->
+    <div class="chat-main">
+        {% if active_counselor %}
+            <!-- Header -->
+            <div class="chat-header">
+                Chatting with <span class="text-gold">{{ active_counselor.username }}</span>
+                <button onclick="document.getElementById('complaint-form').style.display='block'" 
+                        class="btn btn-danger" style="float: right; padding: 2px 10px; font-size: 0.7rem;">Report</button>
+            </div>
+
+            <!-- Messages -->
+            <div class="chat-messages">
+                {% for msg in messages %}
+                    <div class="message {% if msg.sender_id == current_user.id %}sent{% else %}received{% endif %}">
+                        {{ msg.message }}
+                        <span class="message-time">{{ msg.timestamp.strftime('%H:%M') }}</span>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <!-- Input Area -->
+            <form class="chat-input-area" method="POST" action="{{ url_for('student_chat', counselor_id=active_counselor.id) }}">
+                <input type="text" name="message" class="form-control" placeholder="Type a message..." required autocomplete="off">
+                <button type="submit" class="btn"><i class="fas fa-paper-plane"></i></button>
+            </form>
+
+            <!-- Hidden Complaint Form -->
+            <div id="complaint-form" style="display: none; padding: 20px; background: #fff; border-top: 1px solid #eee;">
+                <h5>Report {{ active_counselor.username }}</h5>
+                <form method="POST" action="{{ url_for('file_complaint') }}">
+                    <input type="hidden" name="counselor_id" value="{{ active_counselor.id }}">
+                    <input type="text" name="description" class="form-control mb-2" placeholder="Describe issue..." required>
+                    <button type="submit" class="btn btn-danger btn-sm">Submit Report</button>
+                    <button type="button" onclick="document.getElementById('complaint-form').style.display='none'" class="btn btn-secondary btn-sm">Cancel</button>
+                </form>
+            </div>
+
+        {% else %}
+            <!-- Empty State -->
+            <div style="flex: 1; display: flex; justify-content: center; align-items: center; color: #999;">
+                <p>Select a counselor from the sidebar to start chatting.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

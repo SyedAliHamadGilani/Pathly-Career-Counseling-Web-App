@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Admin Control Panel</h1>
+    <p>System Overview & Management</p>
+</div>
+
+<!-- Dashboard Layout: Notifications sidebar + Main Content -->
+<div class="dashboard-layout">
+    
+    <!-- Main Content Column -->
+    <div>
+        <!-- Stats -->
+        <div class="grid-container">
+            <div class="card text-center">
+                <h2 style="font-size: 2.5rem; color: var(--primary-gold);">{{ pending_counselors }}</h2>
+                <p>Pending Counselors</p>
+            </div>
+            <div class="card text-center">
+                <h2 style="font-size: 2.5rem; color: var(--primary-gold);">{{ pending_ambassadors }}</h2>
+                <p>Pending Ambassadors</p>
+            </div>
+            <div class="card text-center">
+                <h2 style="font-size: 2.5rem; color: var(--primary-gold);">{{ pending_unis }}</h2>
+                <p>Pending Universities</p>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <!-- Approvals -->
+            <div class="card">
+                <h3><i class="fas fa-tasks text-gold"></i> Quick Actions</h3>
+                <p class="text-grey mb-2">Manage pending requests.</p>
+                
+                <a href="{{ url_for('view_pending_details') }}" class="btn btn-block mb-2" style="margin-bottom: 15px;">
+                    View Pending Details Table
+                </a>
+
+                <div class="form-group">
+                    <label>Quick Approve University (ID)</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="u_id" class="form-control" placeholder="ID">
+                        <button onclick="window.location.href='/admin/approve_university/'+document.getElementById('u_id').value+'/approve'" class="btn btn-success">✓</button>
+                        <button onclick="window.location.href='/admin/approve_university/'+document.getElementById('u_id').value+'/reject'" class="btn btn-danger">✗</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Announcements -->
+            <div class="card">
+                <h3><i class="fas fa-bullhorn text-gold"></i> Post Announcement</h3>
+                <form method="POST" action="{{ url_for('post_announcement') }}">
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="title" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Content</label>
+                        <textarea name="content" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-block">Publish</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Sidebar (Dynamic based on data) -->
+    <div class="card" style="height: fit-content;">
+        <h3><i class="fas fa-bell text-gold"></i> Notifications</h3>
+        <div style="margin-top: 15px;">
+            {% if pending_counselors > 0 %}
+                <div class="notification-item">
+                    <i class="fas fa-user-tie notification-icon"></i>
+                    <div>
+                        <strong>New Counselor</strong>
+                        <p class="text-grey">{{ pending_counselors }} applications waiting.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if pending_ambassadors > 0 %}
+                <div class="notification-item">
+                    <i class="fas fa-user-graduate notification-icon"></i>
+                    <div>
+                        <strong>New Ambassador</strong>
+                        <p class="text-grey">{{ pending_ambassadors }} applications waiting.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if pending_unis > 0 %}
+                <div class="notification-item">
+                    <i class="fas fa-university notification-icon"></i>
+                    <div>
+                        <strong>University Request</strong>
+                        <p class="text-grey">{{ pending_unis }} institutes submitted.</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if pending_counselors == 0 and pending_ambassadors == 0 and pending_unis == 0 %}
+                <p class="text-grey text-center mt-2">All caught up!</p>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

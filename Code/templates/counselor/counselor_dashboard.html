@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Counselor Portal</h1>
+    <p>Welcome, {{ current_user.username }}</p>
+</div>
+
+<div class="grid-container">
+    <a href="{{ url_for('counselor_view_messages') }}" class="card text-center" style="display: block; color: inherit;">
+        <i class="fas fa-envelope-open-text card-icon"></i>
+        <h3 class="card-title">Student Messages</h3>
+        <p class="card-text">View and reply to student queries.</p>
+    </a>
+    
+    <div class="card text-center">
+        <i class="fas fa-user-check card-icon"></i>
+        <h3 class="card-title">Profile Status</h3>
+        <p class="card-text">
+            Status: <span class="text-gold"><strong>{{ current_user.counselor_profile.status }}</strong></span>
+        </p>
+    </div>
+</div>
+{% endblock %}

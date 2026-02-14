@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Hello, {{ current_user.username }}!</h1>
+    <p>Manage your academic profile and explore opportunities.</p>
+</div>
+
+<div class="grid-container">
+    <a href="{{ url_for('calculate_aggregate') }}" class="card text-center" style="display: block; color: inherit;">
+        <i class="fas fa-calculator card-icon"></i>
+        <h3 class="card-title">Calculate Aggregate</h3>
+        <p class="card-text">Input your marks to see where you stand.</p>
+    </a>
+
+    <a href="{{ url_for('student_preferences') }}" class="card text-center" style="display: block; color: inherit;">
+        <i class="fas fa-sliders-h card-icon"></i>
+        <h3 class="card-title">My Preferences</h3>
+        <p class="card-text">Set your preferred city and degree.</p>
+    </a>
+
+    <a href="{{ url_for('student_suggestions') }}" class="card text-center" style="display: block; color: inherit;">
+        <i class="fas fa-lightbulb card-icon"></i>
+        <h3 class="card-title">University Suggestions</h3>
+        <p class="card-text">View universities that match your profile.</p>
+    </a>
+
+    <a href="{{ url_for('student_chat') }}" class="card text-center" style="display: block; color: inherit;">
+        <i class="fas fa-comments card-icon"></i>
+        <h3 class="card-title">Chat with Counselor</h3>
+        <p class="card-text">Get guidance from verified experts.</p>
+    </a>
+</div>
+
+<div class="card">
+    <h3>Quick Status</h3>
+    <div style="display: flex; gap: 40px; margin-top: 20px;">
+        <div>
+            <span style="display: block; font-size: 0.9rem; color: #666;">Current Aggregate</span>
+            <span style="font-size: 1.5rem; font-weight: bold; color: var(--primary-gold);">
+                {{ current_user.student_profile.aggregate|round(2) }}%
+            </span>
+        </div>
+        <div>
+            <span style="display: block; font-size: 0.9rem; color: #666;">Preferred City</span>
+            <span style="font-size: 1.5rem; font-weight: bold;">
+                {{ current_user.student_profile.city_pref or 'Not Set' }}
+            </span>
+        </div>
+    </div>
+</div>
+{% endblock %}

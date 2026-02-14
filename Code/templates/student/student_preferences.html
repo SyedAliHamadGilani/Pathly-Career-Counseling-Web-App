@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Set Preferences</h1>
+    <a href="{{ url_for('student_dashboard') }}">&larr; Back to Dashboard</a>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <form method="POST" action="{{ url_for('student_preferences') }}">
+        <div class="form-group">
+            <label>Preferred City</label>
+            <input type="text" name="city" class="form-control" 
+                   value="{{ current_user.student_profile.city_pref or '' }}" 
+                   placeholder="e.g. Lahore, Karachi">
+        </div>
+        
+        <div class="form-group">
+            <label>Preferred Degree / Program</label>
+            <input type="text" name="degree" class="form-control" 
+                   value="{{ current_user.student_profile.degree_pref or '' }}" 
+                   placeholder="e.g. CS, Medical, Engineering">
+        </div>
+        
+        <button type="submit" class="btn">Save Preferences</button>
+    </form>
+</div>
+{% endblock %}

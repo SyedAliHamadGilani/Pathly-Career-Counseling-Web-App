@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Pending Details</h1>
+    <a href="{{ url_for('admin_dashboard') }}">&larr; Back to Dashboard</a>
+</div>
+
+<div class="card mb-2">
+    <h3><i class="fas fa-user-tie text-gold"></i> Pending Counselors</h3>
+    <div class="table-responsive">
+        {% if counselors %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Qualification</th>
+                    <th>Experience</th>
+                    <th>CV</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in counselors %}
+                <tr>
+                    <td>{{ c.user.username }}</td>
+                    <td>{{ c.user.email }}</td>
+                    <td>{{ c.qualification }}</td>
+                    <td>{{ c.experience }}</td>
+                    <td>
+                        {% if c.cv_filename %}
+                            <a href="{{ url_for('download_cv', filename=c.cv_filename) }}" target="_blank" class="text-gold">
+                                <i class="fas fa-file-download"></i> Download
+                            </a>
+                        {% else %}
+                            <span class="text-danger">Missing</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('approve_counselor', counselor_id=c.id, action='approve') }}" class="btn btn-success" style="padding: 5px 10px; font-size: 0.8rem;">Approve</a>
+                        <a href="{{ url_for('approve_counselor', counselor_id=c.id, action='reject') }}" class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Reject</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-grey" style="padding: 10px;">No pending counselor requests.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <h3><i class="fas fa-university text-gold"></i> Pending Ambassadors</h3>
+    <div class="table-responsive">
+        {% if ambassadors %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>University Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for a in ambassadors %}
+                <tr>
+                    <td>{{ a.user.username }}</td>
+                    <td>{{ a.user.email }}</td>
+                    <td>{{ a.university_name }}</td>
+                    <td>
+                        <a href="{{ url_for('approve_ambassador', ambassador_id=a.id, action='approve') }}" class="btn btn-success" style="padding: 5px 10px; font-size: 0.8rem;">Approve</a>
+                        <a href="{{ url_for('approve_ambassador', ambassador_id=a.id, action='reject') }}" class="btn btn-danger" style="padding: 5px 10px; font-size: 0.8rem;">Reject</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-grey" style="padding: 10px;">No pending ambassador requests.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

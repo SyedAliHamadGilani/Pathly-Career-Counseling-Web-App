@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card fade-in" style="max-width: 500px;">
+        <h2 class="mb-2">Create Account</h2>
+        <p class="mb-2" style="color: #666;">Join Pathly today</p>
+        
+        <!-- Added enctype for file upload -->
+        <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="username">Full Name</label>
+                <input type="text" id="username" name="username" class="form-control" required placeholder="Enter your full name">
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" required placeholder="name@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required placeholder="Strong password required">
+                <small style="font-size: 0.75rem; color: #666;">
+                    Must include: 8+ chars, Uppercase, Lowercase, Number, Special Char.
+                </small>
+            </div>
+
+            <div class="form-group">
+                <label for="role">I am a...</label>
+                <select name="role" id="role" class="form-control" onchange="toggleCVUpload()">
+                    <option value="student">Student</option>
+                    <option value="counselor">Career Counselor</option>
+                    <option value="ambassador">University Ambassador</option>
+                </select>
+            </div>
+
+            <!-- CV Upload Field (Hidden by default) -->
+            <div class="form-group" id="cv-upload-group" style="display: none;">
+                <label for="cv">Upload CV (PDF/DOC)</label>
+                <input type="file" id="cv" name="cv" class="form-control" accept=".pdf,.doc,.docx">
+                <small class="text-danger">* Required for Counselors</small>
+            </div>
+            
+            <button type="submit" class="btn btn-block">Register</button>
+        </form>
+        
+        <p class="mt-2" style="font-size: 0.9rem;">
+            Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+        </p>
+    </div>
+</div>
+
+<script>
+function toggleCVUpload() {
+    const role = document.getElementById('role').value;
+    const cvGroup = document.getElementById('cv-upload-group');
+    if (role === 'counselor') {
+        cvGroup.style.display = 'block';
+        document.getElementById('cv').required = true;
+    } else {
+        cvGroup.style.display = 'none';
+        document.getElementById('cv').required = false;
+    }
+}
+</script>
+{% endblock %}

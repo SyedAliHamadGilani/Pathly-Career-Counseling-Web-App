@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1>Add University</h1>
+    <a href="{{ url_for('ambassador_dashboard') }}">&larr; Back to Dashboard</a>
+</div>
+
+<div class="card" style="max-width: 600px; margin: 0 auto;">
+    <p class="mb-2 text-grey">Please provide accurate details. All submissions require Admin approval.</p>
+    
+    <form method="POST" action="{{ url_for('add_university') }}">
+        <div class="form-group">
+            <label>University Name</label>
+            <input type="text" name="name" class="form-control" required placeholder="e.g. UET Lahore">
+        </div>
+        
+        <div class="form-group">
+            <label>City / Campus Location</label>
+            <input type="text" name="city" class="form-control" required placeholder="e.g. Lahore">
+        </div>
+        
+        <button type="submit" class="btn btn-block">Submit for Approval</button>
+    </form>
+</div>
+{% endblock %}
